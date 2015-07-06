@@ -1,0 +1,19 @@
+---
+- name: Deploy environment using r10k
+  hosts: puppetmasters
+  gather_facts: no
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+
+  tasks:
+    - name: Invoke r10k
+      command: r10k deploy module -e {{ r10k_env }} {{ r10k_module }} -v
+      register: r10k
+    - debug: var=r10k.stderr.splitlines()
+    - debug: var=r10k_env
+    - debug: var=r10k_module
+    - fail: msg="R10k command returned no output. This is most likely that the environment or module didn't exist"
+      when: r10k.stderr == ""
+
+

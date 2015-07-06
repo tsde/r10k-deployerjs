@@ -1,0 +1,20 @@
+<joblist>
+  <job>
+    <id>72f0c69f-763b-4e5d-8551-76e2d1958178</id>
+    <loglevel>INFO</loglevel>
+    <sequence keepgoing='false' strategy='step-first'>
+      <command>
+        <exec>cd /data/ansible/r10k_deployer &amp;&amp; ansible-playbook --extra-vars "r10k_env=${option.r10k_env}" deploy_environment.yaml</exec>
+      </command>
+    </sequence>
+    <description>Use ansible and invoke r10k to deploy an entire environment</description>
+    <name>Deploy puppet environment</name>
+    <context>
+      <project>ansible</project>
+      <options>
+        <option name='r10k_env' regex='^[^ ]+$' required='true' />
+      </options>
+    </context>
+    <uuid>72f0c69f-763b-4e5d-8551-76e2d1958178</uuid>
+  </job>
+</joblist>

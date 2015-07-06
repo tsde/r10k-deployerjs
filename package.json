@@ -1,0 +1,36 @@
+{
+  "name": "r10k-deployerjs",
+  "version": "0.0.1",
+  "description": "Webhook used to automatically deploy dynamic Puppet environments through R10K",
+  "main": "app.js",
+  "dependencies": {
+    "co": "^4.5.x",
+    "bluebird": "^2.9.x",
+    "co-body": "^2.0.x",
+    "co-sleep": "^0.0.x",
+    "fs-extra": "^0.21.x",
+    "co-request": "^0.2.x",
+    "git-promise": "^0.2.x",
+    "koa": "^0.21.x",
+    "koa-router": "^5.1.x",
+    "kue": "^0.9.x",
+    "promisify-node": "^0.1.x",
+    "xml2js": "^0.4.x",
+    "log4js": "^0.6.x"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --harmony app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/tsde/r10k-deployerjs.git"
+  },
+  "author": "tsde",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tsde/r10k-deployerjs/issues"
+  },
+  "homepage": "https://github.com/tsde/r10k-deployerjs#readme"
+}

@@ -1,0 +1,25 @@
+/*
+  Simple example of a log4js configuration file
+  Two appenders are defined:
+    - console: logging on the console with nice colors
+    - file: log file rotated when reaching a size of 10MB
+*/
+{
+  "appenders": [
+    {
+      "type": "console",
+      "category": "r10k-deployer"
+    },
+		{
+			"type": "file",
+			"filename": "/var/log/r10k-deployer/out.log",
+			"maxLogSize": 10485760,
+			"backups": 7,
+			"compress": true,
+			"category": "r10k-deployer"
+		}
+  ],
+  "levels": {
+    "r10k-deployer":  "TRACE"
+  }
+}
