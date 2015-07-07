@@ -5,6 +5,7 @@ var KU = require('./lib/kueUtils');
 var logger = require('./lib/logger');
 
 var app = koa();
+var app_port = process.env.KOA_LISTEN_PORT || 3000;
 
 
 // Env variables are mandatory
@@ -25,6 +26,6 @@ app
 	.use(router.routes())
 	.use(router.allowedMethods());
 
-app.listen(3000);
+app.listen(app_port);
 
-logger.info('Koa started on port 3000');
+logger.info('Koa started on port '+app_port);

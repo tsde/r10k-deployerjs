@@ -1,9 +1,3 @@
-/*
-  Simple example of a log4js configuration file
-  Two appenders are defined:
-    - console: logging on the console with nice colors
-    - file: log file rotated when reaching a size of 10MB
-*/
 {
   "appenders": [
     {

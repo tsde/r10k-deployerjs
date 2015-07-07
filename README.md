@@ -71,6 +71,11 @@ To work properly, the following environment variables **must** be set
   - **RD\_API\_JOB\_ENV\_ID**: Rundeck job ID used to deploy entire Puppet environments
   - **RD\_API\_JOB\_MOD\_ID**: Rundeck Job ID used to deploy a specific module in a specific Puppet environment
 
+The following environment variables are **optional**
+
+  - **KOA_LISTEN_PORT**: listen port for Koa (default 3000)
+  - **PUPPETFILE_GIT_REMOTE_NAME**: name of the remote for your puppetfile repository (default 'origin')
+
 
 ## Logging
 
