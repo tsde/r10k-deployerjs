@@ -75,6 +75,8 @@ The following environment variables are **optional**
 
   - **KOA_LISTEN_PORT**: listen port for Koa (default 3000)
   - **PUPPETFILE_GIT_REMOTE_NAME**: name of the remote for your puppetfile repository (default 'origin')
+  - **REDIS_PORT**: port used by your redis instance (default 6379)
+  - **REDIS_HOST**: host where redis is running (default 127.0.0.1)
 
 
 ## Logging
