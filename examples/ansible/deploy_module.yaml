@@ -1,5 +1,5 @@
 ---
-- name: Deploy environment using r10k
+- name: Deploy specific module
   hosts: puppetmasters
   gather_facts: no
   remote_user: ansible
@@ -7,7 +7,9 @@
   become_method: sudo
 
   tasks:
-    - name: Invoke r10k
+    - name: Invoke r10k to update Puppetfile
+      command: r10k deploy environment {{ r10k_env }} -v
+    - name: Invoke r10k to deploy a specific module in a specific environment
       command: r10k deploy module -e {{ r10k_env }} {{ r10k_module }} -v
       register: r10k
     - debug: var=r10k.stderr.splitlines()
@@ -15,5 +17,3 @@
     - debug: var=r10k_module
     - fail: msg="R10k command returned no output. This is most likely that the environment or module didn't exist"
       when: r10k.stderr == ""
-
-
