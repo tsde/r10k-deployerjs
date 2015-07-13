@@ -9,7 +9,7 @@ This piece of code is provided as is. Feel free to fork and play with it. Also, 
 
 ## So, what is this thing ?
 
-My team uses Puppet to manage our customers' platforms. Git is used as our VCS for our Puppet code. This app is meant to be used as a post-receive webhook for Gitlab (that's what we use. I'll try to add compatibility with others some day - See TODO). It allows you to automatically deploy Puppet environments based on git branches. Under the hood, R10k is used to actually deploy the environments.
+My team uses Puppet to manage our customers' platforms. Git is used as our VCS for our Puppet code. This app is meant to be used as a post-receive webhook for Gitlab (that's what we use. I'll try to add compatibility with others some day - See [TODO](#todo)). It allows you to automatically deploy Puppet environments based on git branches. Under the hood, R10k is used to actually deploy the environments.
 
 This work is heavily based (stolen?;) on Phil Zimmerman's [Reaktor](https://github.com/pzim/reaktor).
 
@@ -81,7 +81,7 @@ The following environment variables are **optional**
 
 ## Logging
 
-Log4js is used as the logging system. An example configuration file is provided in the **examples/log4js/logger.json** file. The file is checked every 30 seconds for changes. This is can be useful when you want to change log level without restarting the app.
+Log4js is used as the logging system. An example configuration file is provided in the **examples/log4js/logger.json** file. The file is checked every 30 seconds for changes. This can be useful when you want to change log level without restarting the app.
 
 
 ## <a name="head1234"></a>TODO
