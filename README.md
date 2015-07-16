@@ -51,9 +51,9 @@ As I like to test new things, this code is using ES6 generators and promises.
 
 This webhook was designed to work **ONLY** with a simple git workflow based on feature branches merged regularly in a golden **production** branch.
 
-Each Puppet module resides in its own git repository. Each repository has only one branch named **production** (**NOT** master cause it messes with r10k - this is important) which is the "don't-you-touch-that" branch.
+First, you have to set up what is called the *Control Repository* containing your Puppetfile. This repository has only one branch named **production** which is the "don't-you-touch-that" branch. IMPORTANT: you should **NOT** name this branch *master* or it will mess up with R10k. You should give strict permissions to this repository.
 
-Changes are never pushed in this branch directly. Instead, you use **feature** branches to test your, well, features. Then you open a merge request so that it can be reviewed and potentially accepted.
+Second, each Puppet module resides in its own git repository. Each repository has only one "golden" branch. You can name it whatever you like (master, production, etc...). Changes are never pushed to this branch directly. Instead, you use **feature** branches to test ...well, your features. Then you open a merge request so that it can be reviewed and potentially accepted by people who have "master" permissions on repositories.
 
 These **feature** branches represent dynamic Puppet environments which are then generated with R10k.
 
@@ -84,9 +84,16 @@ The following environment variables are **optional**
 Log4js is used as the logging system. An example configuration file is provided in the **examples/log4js/logger.json** file. The file is checked every 30 seconds for changes. This can be useful when you want to change log level without restarting the app.
 
 
-## <a name="head1234"></a>TODO
+## Limitations (at the moment)
+
+  - This webhook works only on git branches. Tags are not supported yet, but that'll change soon as it's not that difficult to implement ;)
+  - Newly created modules have to be **manually** referenced in your Puppetfile as it should not be something you do on a daily basis. This webhook doesn't automatically add modules if they're not referenced.
+
+
+## TODO
 
   - Code optimization. For example, the *create_action*, *modify_action*, *delete_action* share many common parts and could be refactored (use constructor and prototypes maybe)
+  - Support git tags
   - Add a feature to send notification to Hip-Chat or similar
   - Add a Github/Stash handler
   - ...
