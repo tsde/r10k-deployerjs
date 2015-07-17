@@ -46,7 +46,7 @@ As I like to test new things, this code is using ES6 generators and promises.
 
         $ npm start
 
-  - Configure the webhook in Gitlab: **http://<hostname>:<port>/gitlab** (you can also use https)
+  - Configure the webhook in Gitlab: **http://hostname:port/gitlab** (you can also use https)
 
 
 ## Git workflow
