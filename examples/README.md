@@ -13,3 +13,8 @@ This directory contains two Rundeck job definitions. These jobs are only used to
 ## Log4js
 
 This directory provides a simple log4js configuration file.
+
+
+## SSL
+
+Self-signed certificate so you can quickly test the app with SSL. **Of course, don't use this in a production environment.** This is only meant for testing.
