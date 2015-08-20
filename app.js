@@ -51,12 +51,14 @@ if (sslRequired) {
   // HTTPS
   https.createServer(ssl_opts, app.callback()).listen(app_port);
 
+  logger.info('Koa started on port '+app_port+' with SSL support');
+
 }
 else {
 
   // HTTP
   app.listen(app_port);
 
-}
+  logger.info('Koa started on port '+app_port);
 
-logger.info('Koa started on port '+app_port);
+}
