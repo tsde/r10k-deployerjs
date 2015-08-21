@@ -14,6 +14,17 @@ My team uses Puppet to manage our customers' platforms. Git is used as our VCS f
 This work is heavily based (stolen?;) on Phil Zimmerman's [Reaktor](https://github.com/pzim/reaktor).
 
 
+## Git workflow
+
+This webhook was designed to work **ONLY** with a simple git workflow based on feature branches merged regularly in a golden **production** branch.
+
+First, you have to set up what is called the *Control Repository* containing your Puppetfile. This repository has only one branch named **production** which is the "don't-you-touch-that" branch. IMPORTANT: you should **NOT** name this branch *master* or it will mess up with R10k. You should give strict permissions to this repository.
+
+Second, each Puppet module resides in its own git repository. Each repository has only one "golden" branch. You **MUST** name this branch **production** too. Changes are never pushed to this branch directly. Instead, you use **feature** branches to test ...well, your features. Then you open a merge request so that it can be reviewed and potentially accepted by people who have "master" permissions on repositories.
+
+These **feature** branches represent dynamic Puppet environments which are then generated with R10k.
+
+
 ## Technical considerations
 
 As I like to test new things, this code is using ES6 generators and promises.
@@ -28,7 +39,7 @@ As I like to test new things, this code is using ES6 generators and promises.
 ## Requirements
 
   - nodeJS >= 0.12
-  - Redis >= 3 (but should work with earlier versions)
+  - Redis >= 3 (but should work with version >= 2.6.12 which is a Kue requirement)
   - Rundeck >= 2.5
 
 
@@ -47,17 +58,6 @@ As I like to test new things, this code is using ES6 generators and promises.
         $ npm start
 
   - Configure the webhook in Gitlab: **http://hostname:port/gitlab** (you can also use https)
-
-
-## Git workflow
-
-This webhook was designed to work **ONLY** with a simple git workflow based on feature branches merged regularly in a golden **production** branch.
-
-First, you have to set up what is called the *Control Repository* containing your Puppetfile. This repository has only one branch named **production** which is the "don't-you-touch-that" branch. IMPORTANT: you should **NOT** name this branch *master* or it will mess up with R10k. You should give strict permissions to this repository.
-
-Second, each Puppet module resides in its own git repository. Each repository has only one "golden" branch. You can name it whatever you like (master, production, etc...). Changes are never pushed to this branch directly. Instead, you use **feature** branches to test ...well, your features. Then you open a merge request so that it can be reviewed and potentially accepted by people who have "master" permissions on repositories.
-
-These **feature** branches represent dynamic Puppet environments which are then generated with R10k.
 
 
 ## Environment variables
@@ -82,6 +82,40 @@ The following environment variables are **optional**
   - **PUPPETFILE_GIT_REMOTE_NAME**: name of the remote for your puppetfile repository (default 'origin')
   - **REDIS_PORT**: port used by your redis instance (default 6379)
   - **REDIS_HOST**: host where redis is running (default 127.0.0.1)
+
+
+## What happens during a Push
+
+Three events can be triggered during a push: branch creation, branch modification or branch deletion.
+
+### Create events
+
+When a branch is created on a module, the following happens:
+  - The Puppetfile repository is cloned and fetched
+  - The branch is checked out.
+    - Usually, the branch doesn't exist
+    - But it's also possible for multiple modules sharing the same branch when a feature is linked between modules.
+  - If the module is not yet referenced in the Puppet file, we add it
+  - The ref of the module is updated in the Puppetfile
+  - Then, we commit and push the changes upstream
+  - R10k is invoked:
+    - deploy all modules in 'feature' environment if only one module is involved in the feature branch (most of the time)
+    - update the module only if there's more than one module involved in a feature branch previously created
+
+
+### Modify events
+
+When a branch is modified on a module, the steps are simpler. Usually, we invoke R10k to update the module. However, some git actions can be triggered if changes from the production branch are merged into the feature branch or if the ref of the module is incorrect in the Puppetfile (if some people manually messed up with the Puppetfile).
+
+
+### Delete events
+
+When a branch is deleted on a module, the following happens:
+- The Puppetfile repository is cloned and fetched
+- The branch is checked out.
+- The Puppetfile is parsed to see if the module is the last one referencing the branch
+  - If it's the case, the branch is simply deleted on the Puppetfile repository
+  - Otherwise, the reference of the module is changed to 'production' and we push the modifications upstream. R10k is then invoked to update the module.
 
 
 ## Logging
