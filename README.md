@@ -123,15 +123,10 @@ When a branch is deleted on a module, the following happens:
 Log4js is used as the logging system. An example configuration file is provided in the **examples/log4js/logger.json** file. The file is checked every 30 seconds for changes. This can be useful when you want to change log level without restarting the app.
 
 
-## Limitations (at the moment)
-
-  - This webhook works only on git branches. Tags are not supported yet, but that'll change soon as it's not that difficult to implement ;)
-  - Newly created modules have to be **manually** referenced in your Puppetfile as it should not be something you do on a daily basis. This webhook doesn't automatically add modules if they're not referenced.
-
-
 ## TODO
 
   - Code optimization. For example, the *create_action*, *modify_action*, *delete_action* share many common parts and could be refactored (use constructor and prototypes maybe)
+  - Don't clone the Puppetfile repo each time there's a push event.
   - Support git tags
   - Add a feature to send notification to Hip-Chat or similar
   - Add a Github/Stash handler
