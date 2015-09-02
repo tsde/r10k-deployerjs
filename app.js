@@ -28,7 +28,6 @@ KU.processJob();
 
 // Define routes
 router.post('/gitlab', plugin.gitlabProcess(process.env.PUPPETFILE_URL));
-router.post('/gitlab_windows', plugin.gitlabProcess(process.env.PUPPETFILE_URL_WINDOWS));
 
 // Use middlewares
 app
