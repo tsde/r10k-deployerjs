@@ -8,7 +8,7 @@
     "bluebird": "^2.9.x",
     "co-body": "^4.0.x",
     "co-sleep": "^0.0.x",
-    "fs-extra": "^0.23.x",
+    "fs-extra": "^0.24.x",
     "co-request": "^1.0.x",
     "git-promise": "^0.2.x",
     "koa": "^1.0.x",

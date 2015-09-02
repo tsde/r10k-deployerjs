@@ -27,7 +27,8 @@ var app_port = process.env.KOA_LISTEN_PORT || 3000;
 KU.processJob();
 
 // Define routes
-router.post('/gitlab', plugin.gitlabProcess());
+router.post('/gitlab', plugin.gitlabProcess(process.env.PUPPETFILE_URL));
+router.post('/gitlab_windows', plugin.gitlabProcess(process.env.PUPPETFILE_URL_WINDOWS));
 
 // Use middlewares
 app
