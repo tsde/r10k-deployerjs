@@ -9,11 +9,10 @@
   tasks:
     - include: deploy_module.yaml
       vars:
-        environment: {{ r10k_env }}
-        module: {{ r10k_module }}
-      when: {{ r10k_type }} == "deploy_mod"
+        env_name: "{{ r10k_env }}"
+        module_name: "{{ r10k_module }}"
+      when: "'{{ r10k_type }}' == 'deploy_mod'"
     - include: deploy_environment.yaml
       vars:
-        environment: {{ r10k_env }}
-        module: {{ r10k_module }}
-      when: {{ r10k_type }} == "deploy_env"
+        env_name: "{{ r10k_env }}"
+      when: "'{{ r10k_type }}' == 'deploy_env'"

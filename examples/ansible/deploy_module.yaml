@@ -1,10 +1,10 @@
 ---
 
 - name: Invoke r10k to update Puppetfile
-  command: r10k deploy environment {{ environment }} -v
+  command: r10k deploy environment {{ env_name }} -v
 
 - name: Invoke r10k to deploy a specific module in a specific environment
-  command: r10k deploy module -e {{ environment }} {{ module }} -v
+  command: r10k deploy module -e {{ env_name }} {{ module_name }} -v
   register: r10k
 
 - fail: msg="R10k command returned no output. This is most likely that the environment or module didn't exist"

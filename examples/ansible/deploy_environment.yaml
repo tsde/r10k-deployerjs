@@ -1,7 +1,7 @@
 ---
 
 - name: Invoke r10k to deploy specific environment entirely
-  command: r10k deploy environment {{ environment }} -pv
+  command: r10k deploy environment {{ env_name }} -pv
   register: r10k
 
 - fail: msg="R10k command returned no output. This is most likely that the environment or module didn't exist"

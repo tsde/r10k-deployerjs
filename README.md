@@ -31,7 +31,7 @@ As I like to test new things, this code is using ES6 generators and promises.
 
 [Koa](https://github.com/koajs/koa) is used as the web framework along with [co](https://github.com/tj/co) for controlling generator flow.
 
-[Redis](http://redis.io/) is used as a queue backend to store the jobs.
+[Redis](http://redis.io/) is used as a queue backend to store the jobs and [kue](https://github.com/Automattic/kue) is used as the queue handler.
 
 [R10k](https://github.com/puppetlabs/r10k) is invoked through [Rundeck](http://rundeck.org/) as it provides an easy-to-use REST API and ways of launching remote commands easily on multiple servers.
 
@@ -97,7 +97,7 @@ The **r10k_type** variable is set either to **deploy_env** or **deploy_mod** and
   - *deploy_env*: `r10k deploy environment <r10k_env> -p`
   - *deploy_mod*: `r10k deploy environment <r10k_env>` to update the Puppetfile followed by `r10k deploy module -e <r10k_env> <r10k_module>`
 
-I personally use Ansible playbooks (triggered through the Rundeck API) to execute these commands. Example playbooks are provided in the *examples/ansible* folder.
+I personally use Ansible playbooks (triggered through the Rundeck API) to execute these commands. Example playbooks are provided in the *examples/ansible* folder and a Rundeck job definition in *examples/rundeck/R10k_Deployments.xml*.
 
 
 ## What happens during a Push
@@ -136,7 +136,7 @@ When a branch is deleted on a module, the following happens:
 
 ## Logging
 
-Log4js is used as the logging system. An example configuration file is provided in the **examples/log4js/logger.json** file. The file is checked every 30 seconds for changes. This can be useful when you want to change log level without restarting the app.
+Log4js is used as the logging system. An example configuration file is provided in the **examples/log4js/logger.json** file.
 
 
 ## TODO

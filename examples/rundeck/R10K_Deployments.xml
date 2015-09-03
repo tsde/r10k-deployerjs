@@ -1,0 +1,22 @@
+<joblist>
+  <job>
+    <id>4e70f000-c1ab-42be-816e-b15daa0e2a5f</id>
+    <loglevel>INFO</loglevel>
+    <sequence keepgoing='false' strategy='step-first'>
+      <command>
+        <exec>cd /home/rundeck/ansible &amp;&amp; ansible-playbook --extra-vars "r10k_type=${option.r10k_type} r10k_env=${option.r10k_env} r10k_module=${option.r10k_module}" r10k_deploy.yaml</exec>
+      </command>
+    </sequence>
+    <description>Use ansible and invoke r10k to deploy a module or an entire Puppet environment</description>
+    <name>R10K Deployments</name>
+    <context>
+      <project>ansible</project>
+      <options>
+        <option name='r10k_env' regex='^[^ ]+$' required='true' />
+        <option name='r10k_module' regex='^[^ ]+$' required='true' />
+        <option name='r10k_type' values='deploy_env,deploy_mod' required='true' />
+      </options>
+    </context>
+    <uuid>4e70f000-c1ab-42be-816e-b15daa0e2a5f</uuid>
+  </job>
+</joblist>
