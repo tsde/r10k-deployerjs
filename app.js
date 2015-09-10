@@ -14,9 +14,8 @@ if (!process.env.LOG4JS_CONFIG
  || !process.env.RD_API_VERSION
  || !process.env.RD_PROJECT_NAME
  || !process.env.RD_API_TOKEN
- || !process.env.RD_API_JOB_ENV_ID
- || !process.env.RD_API_JOB_MOD_ID) {
-  logger.fatal('!! OOOPS !! The following environment variables are mandatory:\n\t- LOG4JS_CONFIG: Path to your logger configuration file\n\t- PUPPETFILE_URL: Your Puppetfile git repository URL\n\t- RD_BASEURL: Rundeck base URL\n\t- RD_API_VERSION: Version number of Rundeck API\n\t- RD_API_TOKEN: Token used to access Rundeck API\n\t- RD_PROJECT_NAME: Name of your Rundeck project where are configured your job\n\t- RD_API_JOB_ENV_ID: ID of the job used to deploy entire environments with r10k\n\t- RD_API_JOB_MOD_ID: ID of the job used to deploy a single module in a specific environment with r10k');
+ || !process.env.RD_API_JOB_ID) {
+  logger.fatal('!! OOOPS !! The following environment variables are mandatory:\n\t- LOG4JS_CONFIG: Path to your logger configuration file\n\t- PUPPETFILE_URL: Your Puppetfile git repository URL\n\t- RD_BASEURL: Rundeck base URL\n\t- RD_API_VERSION: Version number of Rundeck API\n\t- RD_API_TOKEN: Token used to access Rundeck API\n\t- RD_PROJECT_NAME: Name of your Rundeck project where are configured your job\n\t- RD_API_JOB_ID: ID of the job used to deploy either an entire environment or just a module with r10k');
   process.exit(1);
 }
 
@@ -27,7 +26,7 @@ var app_port = process.env.KOA_LISTEN_PORT || 3000;
 KU.processJob();
 
 // Define routes
-router.post('/gitlab', plugin.gitlabProcess());
+router.post('/gitlab', plugin.gitlabProcess(process.env.PUPPETFILE_URL));
 
 // Use middlewares
 app

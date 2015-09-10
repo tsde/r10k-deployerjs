@@ -1,0 +1,18 @@
+---
+- name: Deploy Puppet environment or specific module
+  hosts: puppetmasters
+  gather_facts: no
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+
+  tasks:
+    - include: deploy_module.yaml
+      vars:
+        env_name: "{{ r10k_env }}"
+        module_name: "{{ r10k_module }}"
+      when: "'{{ r10k_type }}' == 'deploy_mod'"
+    - include: deploy_environment.yaml
+      vars:
+        env_name: "{{ r10k_env }}"
+      when: "'{{ r10k_type }}' == 'deploy_env'"

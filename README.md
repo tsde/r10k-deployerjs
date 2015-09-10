@@ -31,7 +31,7 @@ As I like to test new things, this code is using ES6 generators and promises.
 
 [Koa](https://github.com/koajs/koa) is used as the web framework along with [co](https://github.com/tj/co) for controlling generator flow.
 
-[Redis](http://redis.io/) is used as a queue backend to store the jobs.
+[Redis](http://redis.io/) is used as a queue backend to store the jobs and [kue](https://github.com/Automattic/kue) is used as the queue handler.
 
 [R10k](https://github.com/puppetlabs/r10k) is invoked through [Rundeck](http://rundeck.org/) as it provides an easy-to-use REST API and ways of launching remote commands easily on multiple servers.
 
@@ -64,14 +64,13 @@ As I like to test new things, this code is using ES6 generators and promises.
 
 To work properly, the following environment variables **must** be set
 
-  - **LOG4JS\_CONFIG**: path to the log4js configuration file
-  - **PUPPETFILE\_URL**: your Puppetfile repository URL
-  - **RD\_BASEURL**: Rundeck base URL
-  - **RD\_API\_VERSION**: Rundeck API version
-  - **RD\_PROJECT\_NAME**: Rundeck project name containing the r10k jobs
-  - **RD\_API\_TOKEN**: Rundeck token to access the API
-  - **RD\_API\_JOB\_ENV\_ID**: Rundeck job ID used to deploy entire Puppet environments
-  - **RD\_API\_JOB\_MOD\_ID**: Rundeck Job ID used to deploy a specific module in a specific Puppet environment
+  - **LOG4JS_CONFIG**: path to the log4js configuration file
+  - **PUPPETFILE_URL**: your Puppetfile repository URL
+  - **RD_BASEURL**: Rundeck base URL
+  - **RD_API_VERSION**: Rundeck API version
+  - **RD_PROJECT_NAME**: Rundeck project name containing the r10k jobs
+  - **RD_API_TOKEN**: Rundeck token to access the API
+  - **RD_API_JOB_ID**: Rundeck job ID. This job is used to trigger r10k on your puppetmasters
 
 The following environment variables are **optional**
 
@@ -80,8 +79,25 @@ The following environment variables are **optional**
   - **KOA_SSL_KEY**: path to your ssl private key (default 'examples/ssl/r10k-deployerjs.key' - **default is only meant for testing**)
   - **KOA_SSL_CERT**: path to your ssl certificate (default 'examples/ssl/r10k-deployerjs.crt' - **default is only meant for testing**)
   - **PUPPETFILE_GIT_REMOTE_NAME**: name of the remote for your puppetfile repository (default 'origin')
+  - **REDIS_JOB_TYPE**: name of the job type to used (default 'r10k')
   - **REDIS_PORT**: port used by your redis instance (default 6379)
   - **REDIS_HOST**: host where redis is running (default 127.0.0.1)
+
+If you want to run **multiple instances** of this application while using the **same** Redis instance for them, be sure to set the **REDIS_JOB_TYPE** environment variable to a specific value for each instance. Failure to do so may lead to unexpected Redis queue handling for failed jobs.
+
+
+## About Rundeck jobs
+
+This hook doesn't execute r10k directly. Instead, it delegates this task to Rundeck by using its API. Your Rundeck job identified by the **RD_API_JOB_ID** environment variable have to handle the execution of R10k on your puppetmasters. When the hook is triggered, 3 variables are sent to Rundeck which can then be used to create your job:
+  - **r10k_type**
+  - **r10k_env**
+  - **r10k_module**
+
+The **r10k_type** variable is set either to **deploy_env** or **deploy_mod** and is the most important one. You should use it to select the right r10k command to launch on your puppetmasters. Typically, you should launch the following r10k commands when this variable is set to:
+  - *deploy_env*: `r10k deploy environment <r10k_env> -p`
+  - *deploy_mod*: `r10k deploy environment <r10k_env>` to update the Puppetfile followed by `r10k deploy module -e <r10k_env> <r10k_module>`
+
+I personally use Ansible playbooks (triggered through the Rundeck API) to execute these commands. Example playbooks are provided in the *examples/ansible* folder and a Rundeck job definition in *examples/rundeck/R10k_Deployments.xml*.
 
 
 ## What happens during a Push
@@ -120,7 +136,7 @@ When a branch is deleted on a module, the following happens:
 
 ## Logging
 
-Log4js is used as the logging system. An example configuration file is provided in the **examples/log4js/logger.json** file. The file is checked every 30 seconds for changes. This can be useful when you want to change log level without restarting the app.
+Log4js is used as the logging system. An example configuration file is provided in the **examples/log4js/logger.json** file.
 
 
 ## TODO

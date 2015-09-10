@@ -1,16 +1,8 @@
 ---
-- name: Deploy environment
-  hosts: puppetmasters
-  gather_facts: no
-  remote_user: ansible
-  become: yes
-  become_method: sudo
 
-  tasks:
-    - name: Invoke r10k to deploy specific environment entirely
-      command: r10k deploy environment {{ r10k_env }} -pv
-      register: r10k
-    - debug: var=r10k.stderr.splitlines()
-    - debug: var=r10k_env
-    - fail: msg="R10k command returned no output. This is most likely that the environment or module didn't exist"
-      when: r10k.stderr == ""
+- name: Invoke r10k to deploy specific environment entirely
+  command: r10k deploy environment {{ env_name }} -pv
+  register: r10k
+
+- fail: msg="R10k command returned no output. This is most likely that the environment or module didn't exist"
+  when: r10k.stderr == ""
