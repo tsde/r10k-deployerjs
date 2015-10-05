@@ -89,6 +89,7 @@ If you want to run **multiple instances** of this application while using the **
 ## About Rundeck jobs
 
 This hook doesn't execute r10k directly. Instead, it delegates this task to Rundeck by using its API. Your Rundeck job identified by the **RD_API_JOB_ID** environment variable have to handle the execution of R10k on your puppetmasters. When the hook is triggered, 3 variables are sent to Rundeck which can then be used to create your job:
+  - **push_user**
   - **r10k_type**
   - **r10k_env**
   - **r10k_module**
@@ -96,6 +97,8 @@ This hook doesn't execute r10k directly. Instead, it delegates this task to Rund
 The **r10k_type** variable is set either to **deploy_env** or **deploy_mod** and is the most important one. You should use it to select the right r10k command to launch on your puppetmasters. Typically, you should launch the following r10k commands when this variable is set to:
   - *deploy_env*: `r10k deploy environment <r10k_env> -p`
   - *deploy_mod*: `r10k deploy environment <r10k_env>` to update the Puppetfile followed by `r10k deploy module -e <r10k_env> <r10k_module>`
+
+**Warning**: Deploying only a specific module is way faster but keep in mind that the other modules are also subject to change, especially their *production* branch. So if your feature branch for a specific module lives for quite a long time, chances are that you end up with outdated *production* branches for your other modules. If you're concerned about staying the most up-to-date, create a deployment task that always deploy the full environment. The **r10k_type** variables is only useful for short-live branches.
 
 I personally use Ansible playbooks (triggered through the Rundeck API) to execute these commands. Example playbooks are provided in the *examples/ansible* folder and a Rundeck job definition in *examples/rundeck/R10k_Deployments.xml*.
 
