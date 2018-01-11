@@ -27,8 +27,6 @@ These **feature** branches represent dynamic Puppet environments which are then 
 
 ## Technical considerations
 
-As I like to test new things, this code is using ES6 generators and promises.
-
 [Koa](https://github.com/koajs/koa) is used as the web framework along with [co](https://github.com/tj/co) for controlling generator flow.
 
 [Redis](http://redis.io/) is used as a queue backend to store the jobs and [kue](https://github.com/Automattic/kue) is used as the queue handler.
